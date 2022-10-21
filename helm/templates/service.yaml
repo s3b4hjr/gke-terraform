@@ -1,0 +1,16 @@
+{{- if .Values.service.create }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "bootcamp.name" . }}
+  labels:
+    {{- include "bootcamp.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "bootcamp.selectorLabels" . | nindent 4 }}
+{{- end }}
