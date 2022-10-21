@@ -1,6 +1,6 @@
 locals {
   default_labels = {
-		environment = var.environment
+    environment = var.environment
   }
 }
 
@@ -14,13 +14,13 @@ module "gke" {
   project_id = var.project_id
   name       = var.gke_cluster_name
   regional   = false
-  region                     = var.region
-  zones                      = var.zones
+  region     = var.region
+  zones      = var.zones
 
-  network            = var.vpc_name
-  subnetwork         = var.subnetwork
-  ip_range_pods      = "${var.gke_subnet_name}-gke-pods"
-  ip_range_services  = "${var.gke_subnet_name}-gke-services"
+  network           = var.vpc_name
+  subnetwork        = var.subnetwork
+  ip_range_pods     = "${var.gke_subnet_name}-gke-pods"
+  ip_range_services = "${var.gke_subnet_name}-gke-services"
 
   create_service_account     = false
   remove_default_node_pool   = true
@@ -61,7 +61,7 @@ module "gke" {
     google_compute_subnetwork.primary_subnet
   ]
 
-	node_pools = [
+  node_pools = [
     {
       name               = "spot-node-pool"
       machine_type       = "e2-medium"

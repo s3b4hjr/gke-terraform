@@ -26,17 +26,10 @@ variable "active_apis" {
     "container.googleapis.com",
     "monitoring.googleapis.com",
     "logging.googleapis.com",
-    "cloudtrace.googleapis.com",
-    "meshca.googleapis.com",
-    "meshtelemetry.googleapis.com",
-    "meshconfig.googleapis.com",
     "iamcredentials.googleapis.com",
-    "gkeconnect.googleapis.com",
-    "gkehub.googleapis.com",
     "cloudresourcemanager.googleapis.com",
     "stackdriver.googleapis.com",
     "sts.googleapis.com",
-    "anthos.googleapis.com",
   ]
 }
 
