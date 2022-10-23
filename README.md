@@ -1,44 +1,84 @@
-## https://www.thorsten-hans.com/encrypt-your-kubernetes-secrets-with-mozilla-sops/
+### Implantação Terraform
+Instalar CLI do google.
+https://cloud.google.com/sdk/docs/install
 
-2.1   Test with the dev PGP key
-If you want to test sops without having to do a bunch of setup, you can use the example files and pgp key provided with the repository:
+Após criar projeto no GCP alterar no terraform.tfvars o project_id com o ID do projeto criado.
 
-$ git clone https://github.com/mozilla/sops.git
-$ cd sops
-$ gpg --import pgp/sops_functional_tests_key.asc
-$ sops example.yaml
-This last step will decrypt example.yaml using the test private key.
+Autenticar no GCP:
+
+GCP usa Application Default Credentials.
+```
+gcloud auth login
+```
+
+Hablilite application default credentials:
+```
+gcloud auth application-default login
+```
+
+### Criar service account com permissão proprietario, somente para ambiente de estudos.
+```
+gcloud iam service-accounts create terraform \
+    --description="terraform sa" \
+    --display-name="terraform sa"
+```
+
+Mudar PROJECT_ID para o ID do projeto
+```
+gcloud projects add-iam-policy-binding PROJECT_ID \
+    --member="serviceAccount:terraform@PROJECT_ID.iam.gserviceaccount.com" \
+    --role="roles/owner"
+```
+
+Gerar token na raiz do projeto. 
+```
+gcloud iam service-accounts keys create token.json \
+    --iam-account=terraform@PROJECT_ID.iam.gserviceaccount.com
+```
+
+### Plan & Apply terraform
+
+```
+terraform init
+```
+
+```
+terraform apply
+```
 
 
-2.3   Encrypting using GCP KMS
+### Criptografando secrets com Sops
 
-https://cloud.google.com/kms/docs/getting-resource-ids#gcloud_1
+Instalar binario Sops https://github.com/mozilla/sops
 
-GCP KMS uses Application Default Credentials. If you already logged in using
+Criptografando com GCP KMS
+```
+gcloud kms keyrings create sops --location us-central1
+```
+```
+gcloud kms keys create sops --location us-central1 --keyring sops --purpose encryption
+```
+```
+gcloud kms keys list --keyring sops --location us-central1
+```
 
-$ gcloud auth login
-you can enable application default credentials using the sdk:
+Saida do comando:
 
-$ gcloud auth application-default login
-Encrypting/decrypting with GCP KMS requires a KMS ResourceID. You can use the cloud console the get the ResourceID or you can create one using the gcloud sdk:
-
-$ gcloud kms keyrings create sops --location us-central1
-$ gcloud kms keys create sops --location us-central1 --keyring sops --purpose encryption
-$ gcloud kms keyrings list --location us-central1
-$ gcloud kms keys list --keyring sops --location us-central1
-
-# you should see
 NAME                                                                   PURPOSE          PRIMARY_STATE
-projects/my-project/locations/global/keyRings/sops/cryptoKeys/sops-key ENCRYPT_DECRYPT  ENABLED
-Now you can encrypt a file using:
-
-$ sops --encrypt --gcp-kms projects/essential-graph-366214/locations/us-central1/keyRings/sops/cryptoKeys/sops secrets.yaml > secrets.enc.yaml
-And decrypt it using:
-
-$ sops --decrypt test.enc.yaml
+projects/PRJECT_ID/locations/global/keyRings/sops/cryptoKeys/sops-key ENCRYPT_DECRYPT  ENABLED
 
 
-**********
+Criptografar usando sops encrypt:
+```
+sops --encrypt --gcp-kms projects/PRJECT_ID/locations/us-central1/keyRings/sops/cryptoKeys/sops secrets.yaml > secrets.enc.yaml
+```
+
+Descriptografar:
+```
+sops --decrypt test.enc.yaml
+```
+
+### Usando helm para implantar chart com secret criptografada
 
 helm upgrade --install bootcamp helm --wait --create-namespace --namespace bootcamp --values helm/environments/development/values.yaml --values helm/environments/development/secrets.yaml
 
