@@ -80,11 +80,11 @@ sops --decrypt helm/environments/prod/secrets.enc.yaml
 ### Usando helm para implantar chart com secret criptografada
 
 Editar o arquivo helm/environments/prod/.sops.yaml e colocar o PROJECT_ID do GPC.
-
+```
 creation_rules:
   - path_regex: .yaml$
     gcp_kms: projects/PROJECT_ID/locations/us-central1/keyRings/sops/cryptoKeys/sops
-    
+```    
 
 helm upgrade --install bootcamp helm --wait --create-namespace --namespace bootcamp --values helm/environments/prod/values.yaml --values helm/environments/prod/secrets.yaml
 
