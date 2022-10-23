@@ -60,21 +60,21 @@ gcloud kms keys create sops --location us-central1 --keyring sops --purpose encr
 ```
 ```
 gcloud kms keys list --keyring sops --location us-central1
-```
 
 Saida do comando:
 
-NAME                                                    PURPOSE          ALGORITHM                    PROTECTION_LEVEL  LABELS  PRIMARY_ID  PRIMARY_STATE
-projects/PROJECT_ID/locations/us-central1/keyRings/sops-teste/cryptoKeys/sops-teste ENCRYPT_DECRYPT GOOGLE_SYMMETRIC_ENCRYPTION SOFTWARE 1 ENABLED
+NAME                                                                                PURPOSE          PRIMARY_STATE
+projects/PROJECT_ID/locations/us-central1/keyRings/sops-teste/cryptoKeys/sops-teste ENCRYPT_DECRYPT  ENABLED
+```
 
 Criptografar usando sops encrypt:
 ```
-sops --encrypt --gcp-kms projects/PRJECT_ID/locations/us-central1/keyRings/sops/cryptoKeys/sops secrets.yaml > secrets.enc.yaml
+sops --encrypt --gcp-kms projects/PRJECT_ID/locations/us-central1/keyRings/sops/cryptoKeys/sops helm/environments/prod/secrets.yaml > helm/environments/prod/secrets.enc.yaml
 ```
 
 Descriptografar:
 ```
-sops --decrypt test.enc.yaml
+sops --decrypt helm/environments/prod/secrets.enc.yaml
 ```
 
 ### Usando helm para implantar chart com secret criptografada
