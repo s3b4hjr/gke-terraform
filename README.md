@@ -64,9 +64,8 @@ gcloud kms keys list --keyring sops --location us-central1
 
 Saida do comando:
 
-NAME                                                                   PURPOSE          PRIMARY_STATE
-projects/PRJECT_ID/locations/global/keyRings/sops/cryptoKeys/sops-key ENCRYPT_DECRYPT  ENABLED
-
+NAME                                                    PURPOSE          ALGORITHM                    PROTECTION_LEVEL  LABELS  PRIMARY_ID  PRIMARY_STATE
+projects/PROJECT_ID/locations/us-central1/keyRings/sops-teste/cryptoKeys/sops-teste ENCRYPT_DECRYPT GOOGLE_SYMMETRIC_ENCRYPTION SOFTWARE 1 ENABLED
 
 Criptografar usando sops encrypt:
 ```
@@ -80,10 +79,15 @@ sops --decrypt test.enc.yaml
 
 ### Usando helm para implantar chart com secret criptografada
 
-helm upgrade --install bootcamp helm --wait --create-namespace --namespace bootcamp --values helm/environments/development/values.yaml --values helm/environments/development/secrets.yaml
+Editar o arquivo helm/environments/prod/.sops.yaml e colocar o PROJECT_ID do GPC.
+
+creation_rules:
+  - path_regex: .yaml$
+    gcp_kms: projects/PROJECT_ID/locations/us-central1/keyRings/sops/cryptoKeys/sops
+    
+
+helm upgrade --install bootcamp helm --wait --create-namespace --namespace bootcamp --values helm/environments/prod/values.yaml --values helm/environments/prod/secrets.yaml
 
 kubectl -n bootcamp port-forward services/bootcamp 5000:5000
 
 curl http://localhost:5000
-
-
