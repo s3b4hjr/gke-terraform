@@ -69,12 +69,12 @@ projects/PROJECT_ID/locations/us-central1/keyRings/sops-teste/cryptoKeys/sops-te
 
 Criptografar usando sops encrypt:
 ```
-sops --encrypt --gcp-kms projects/PRJECT_ID/locations/us-central1/keyRings/sops/cryptoKeys/sops helm/environments/prod/secrets.yaml > helm/environments/prod/secrets.enc.yaml
+sops --encrypt --gcp-kms projects/PROJECT_ID/locations/us-central1/keyRings/sops/cryptoKeys/sops helm/environments/prod/secrets-example.yaml > helm/environments/prod/secrets.yaml
 ```
 
 Descriptografar:
 ```
-sops --decrypt helm/environments/prod/secrets.enc.yaml
+sops --decrypt helm/environments/prod/secrets.yaml
 ```
 
 ### Usando helm para implantar chart com secret criptografada
@@ -84,9 +84,15 @@ Editar o arquivo helm/environments/prod/.sops.yaml e colocar o PROJECT_ID do GPC
 creation_rules:
   - path_regex: .yaml$
     gcp_kms: projects/PROJECT_ID/locations/us-central1/keyRings/sops/cryptoKeys/sops
-```    
+```
 
-helm upgrade --install bootcamp helm --wait --create-namespace --namespace bootcamp --values helm/environments/prod/values.yaml --values helm/environments/prod/secrets.yaml
+Conectar no cluster GKE
+
+```
+gcloud container clusters get-credentials gke-cluster --zone us-central1-a --project PROJECT_ID
+```
+
+helm secrets upgrade --install bootcamp helm --wait --create-namespace --namespace bootcamp --values helm/environments/prod/values.yaml --values helm/environments/prod/secrets.yaml
 
 kubectl -n bootcamp port-forward services/bootcamp 5000:5000
 

@@ -21,7 +21,7 @@ resource "google_compute_subnetwork" "primary_subnet" {
     ip_cidr_range = var.gke_subnet_ip_range_services
   }
 
-  depends_on = [module.project_services, ]
+  depends_on = [module.project_services]
 }
 
 

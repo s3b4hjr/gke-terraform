@@ -4,9 +4,13 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "0.0.1"
 
+ingress:
+  enabled: false
+
 service:
   create: true
   port: 5000
+  type: LoadBalancer
 
 virtualservice:
   create: false

@@ -27,7 +27,6 @@ variable "active_apis" {
     "monitoring.googleapis.com",
     "logging.googleapis.com",
     "iamcredentials.googleapis.com",
-    "cloudresourcemanager.googleapis.com",
     "stackdriver.googleapis.com",
     "sts.googleapis.com",
   ]
