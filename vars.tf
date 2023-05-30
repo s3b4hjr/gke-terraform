@@ -73,12 +73,12 @@ variable "gke_node_pools_tags" {
 variable "gke_k8s_version" {
   type        = string
   description = "(optional)"
-  default     = "1.23"
+  default     = "1.24"
 }
 
 variable "environment" {
     type = string
-    default = "dev"
+    default = "staging"
 }
 
 variable "region" {

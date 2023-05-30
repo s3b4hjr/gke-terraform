@@ -1,5 +1,0 @@
-apiVersion: v2
-name: bootcamp
-description: A TC Helm chart for Kubernetes application.
-type: application
-version: 1.0.0

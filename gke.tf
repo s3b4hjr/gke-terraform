@@ -4,10 +4,11 @@ locals {
   }
 }
 
+## https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/modules/private-cluster
 module "gke" {
-  count   = var.create_gke_cluster ? 1 : 0
+  //count   = var.create_gke_cluster ? 1 : 0
   source  = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
-  version = "22.1.0"
+  # version = "23.2.0"
 
   kubernetes_version = var.gke_k8s_version
 
@@ -36,6 +37,11 @@ module "gke" {
   node_pools_metadata     = var.gke_node_pools_metadata
   node_pools_taints       = var.gke_node_pools_taints
   node_pools_tags         = var.gke_node_pools_tags
+
+  maintenance_end_time   = "2022-05-25T09:00:00Z"
+  maintenance_recurrence	 = "FREQ=WEEKLY;BYDAY=SA,SU"
+  maintenance_start_time = "2022-05-25T03:00:00Z"
+
 
   add_shadow_firewall_rules      = true
   shadow_firewall_rules_priority = 700
@@ -78,7 +84,7 @@ module "gke" {
       enable_gcfs        = false
       enable_gvnic       = false
       auto_repair        = true
-      auto_upgrade       = false
+      auto_upgrade       = true
     },
   ]
 }

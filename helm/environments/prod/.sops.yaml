@@ -1,3 +1,0 @@
-creation_rules:
-  - path_regex: .yaml$
-    gcp_kms: projects/teste-sebah/locations/us-central1/keyRings/sops/cryptoKeys/sops

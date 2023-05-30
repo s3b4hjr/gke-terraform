@@ -1,5 +1,5 @@
 location                     = "us-central1-a"
-project_id                   = "teste-sebah"
+project_id                   = "tc-terraform-test"
 gke_cluster_name             = "gke-cluster"
 gke_subnet_ip_range_pods     = "10.0.0.0/21"
 gke_subnet_ip_range_services = "10.10.0.0/27"
